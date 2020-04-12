@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - onGround
+  - onTable
+  - Wall
+  - Deadly
+  - Player
+  - WaterSource
+  - Slow
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 846087465
+    locked: 0
+  - name: Carpet
+    uniqueID: 888777575
+    locked: 0
+  - name: OnGround
+    uniqueID: 2727928113
+    locked: 0
+  - name: OnTable
+    uniqueID: 762316067
+    locked: 0
+  - name: Roots
+    uniqueID: 578392223
+    locked: 0
+  - name: Player
+    uniqueID: 3532239197
+    locked: 0

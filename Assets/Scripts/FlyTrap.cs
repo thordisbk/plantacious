@@ -7,6 +7,7 @@ public class FlyTrap : MonoBehaviour
     public Sprite closedSprite;
     private Sprite openSprite;
     private bool closed = false;
+    
     void Start()
     {
         openSprite = GetComponent<SpriteRenderer>().sprite;

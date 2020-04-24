@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
 
     public Slider waterSlider;
     private float sliderIncValue;
-    private bool raisingWaterSlider = false;
-    private float raisingWaterSliderValue = 0f;
+    //private bool raisingWaterSlider = false;
+    //private float raisingWaterSliderValue = 0f;
 
     public Slider lifespanSlider;
 
@@ -33,7 +33,9 @@ public class GameManager : MonoBehaviour
 
     private bool thingTouched = false;
 
-    public TextMeshProUGUI winText;
+    //public TextMeshProUGUI winText;
+    public TextMeshProUGUI winText_0;
+    public TextMeshProUGUI winText_1;
     public Image winOverlay;
     public Camera endCam;
     private Vector3 winScreenPos;
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         initializeSettings();
-        winScreenPos = new Vector3(0, 0, -30);
+        winScreenPos = new Vector3(0, 0, -35);
         plant = GameObject.Find("Plant");
     }
 
@@ -222,8 +224,12 @@ public class GameManager : MonoBehaviour
         float t = (Time.fixedTime - winTime) / winScreenPanTime;
         t = 1.0f - (1.0f - t) * (1.0f - t);
         endCam.transform.position = Vector3.Lerp(winPos, winScreenPos, t);
-        winText.color = Color.Lerp(new Color(winText.color.r, winText.color.g, winText.color.b, 0.0f),
-                                   new Color(winText.color.r, winText.color.g, winText.color.b, 1.0f), t);
+        //winText.color = Color.Lerp(new Color(winText.color.r, winText.color.g, winText.color.b, 0.0f),
+        //                           new Color(winText.color.r, winText.color.g, winText.color.b, 1.0f), t);
+        winText_0.color = Color.Lerp(new Color(winText_0.color.r, winText_0.color.g, winText_0.color.b, 0.0f),
+                                     new Color(winText_0.color.r, winText_0.color.g, winText_0.color.b, 1.0f), t);
+        winText_1.color = Color.Lerp(new Color(winText_1.color.r, winText_1.color.g, winText_1.color.b, 0.0f),
+                                     new Color(winText_1.color.r, winText_1.color.g, winText_1.color.b, 1.0f), t);
         if (t > 0.95f) 
         { 
             gameWinScreenEnded = true;

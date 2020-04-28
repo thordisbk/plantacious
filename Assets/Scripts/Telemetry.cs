@@ -11,6 +11,7 @@ public class Telemetry : MonoBehaviour
     //private const string _gform_triggertimestamp = "entry.1115243052";
     //private const string _gform_triggeredbywhat = "entry.1306281063";
     private const string _gform_levelresult = "entry.646337777";
+    private const string _gform_triggertimestamp = "";
 
     public void RegisterCollision( string what )
     {
@@ -24,7 +25,7 @@ public class Telemetry : MonoBehaviour
         
         WWWForm form = new WWWForm();
         form.AddField(_gform_triggertimestamp, System.DateTime.Now.ToString());
-        form.AddField(_gform_triggeredbywhat, data);
+        form.AddField(_gform_levelresult, data);
 
         string urlGoogleFormResponse = GoogleFormBaseUrl + "formResponse";
         using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))

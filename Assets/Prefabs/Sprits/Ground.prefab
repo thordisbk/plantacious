@@ -35,9 +35,91 @@ Transform:
   - {fileID: 1740932916146259931}
   - {fileID: 1740932914610751525}
   - {fileID: 1740932915744844921}
+  - {fileID: 5294182446650632433}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7223404175424899037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5294182446650632433}
+  - component: {fileID: 4461178828196842061}
+  m_Layer: 0
+  m_Name: lowWornDownWoodBathroom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5294182446650632433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223404175424899037}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 12.202, y: 6.4, z: 0}
+  m_LocalScale: {x: 0.75959504, y: 1.5809788, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5234690270163600465}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!212 &4461178828196842061
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223404175424899037}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 846087465
+  m_SortingLayer: 1
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 66212fb3cf22162419033977b0d42869, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 10.26, y: 10.26}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1001 &5234690268788664673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,7 +246,7 @@ PrefabInstance:
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5
+      value: -4.783
       objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
@@ -219,7 +301,7 @@ PrefabInstance:
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 9.576449
       objectReference: {fileID: 0}
     - target: {fileID: 8017824591248365228, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}

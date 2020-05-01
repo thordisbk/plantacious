@@ -5,6 +5,10 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+# screenshots
+*.png
+*.png.meta
+
 # Visual Studio cache directory
 .vs/
 

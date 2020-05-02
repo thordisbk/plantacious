@@ -8,7 +8,7 @@ public class PerlinAnimateMesh : MonoBehaviour
     public float waveHeight = 2f;
 
     private Mesh mesh;
-    private Renderer renderer;
+    private Renderer rendererComp;
 
 
     void Update()
@@ -20,7 +20,7 @@ public class PerlinAnimateMesh : MonoBehaviour
     {
         if (!mesh)
             mesh = GetComponent<MeshFilter>().mesh;
-            renderer = GetComponent<Renderer>();
+            rendererComp = GetComponent<Renderer>();
 
         Vector3[] vertices = mesh.vertices;
 

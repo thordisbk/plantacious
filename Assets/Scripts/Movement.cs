@@ -7,18 +7,19 @@ public class Movement : MonoBehaviour
 {
     public float slowedSpeed = 0.5f;
     public float normalSpeed = 1f;
-    public float maxLifeTime = 20;
-    float currentSpeed;
+    public float maxLifeTime = 20f;
+    private float currentSpeed;
     public float rotSpeed = 1.0f;
     private bool stageWon = false;
     private bool dead = false;
     public Color deathColor = new Color(255, 195, 0);
     public Color lifeColor = Color.white;
     public bool playerSlowed = false;
-    Rigidbody2D rb;
-    public Camera camera;
-    Animator ani;
-    private float timeSinceSpawn;
+    
+    private Rigidbody2D rb;
+    public Camera cam;
+    private Animator ani;
+    private float timeSinceSpawn = 0f;
     private float drynessLevel;
     private SpriteRenderer sr;
 
@@ -101,9 +102,10 @@ public class Movement : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Slow"))
         {
             playerSlowed = true;
-            var shake = camera.GetComponent<ScreenShake>();
+            var shake = cam.GetComponent<ScreenShake>();
             shake.shake = true;
             Debug.Log("plant sprout slowed by: " + collision.gameObject.name);
+            GameManager.instance.touchSlowThings(collision.gameObject);
         }
         if (collision.gameObject.layer == LayerMask.NameToLayer("WaterSource"))
         {
@@ -114,7 +116,7 @@ public class Movement : MonoBehaviour
         if (!onFurniture && collision.gameObject.layer == LayerMask.NameToLayer("Deadly"))
         {
             Debug.Log("plant sprout killed by: " + collision.gameObject.name);
-            GameManager.instance.touchKillerThings();
+            GameManager.instance.touchKillerThings(collision.gameObject);
         }
         else if (onFurniture && collision.gameObject.layer == LayerMask.NameToLayer("Deadly")) {
             Debug.Log("plant sprout on [object] collided with rat/roomba under [object]");
@@ -130,7 +132,7 @@ public class Movement : MonoBehaviour
         //if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Slow"))
         //{
         //    playerSlowed = true;
-        //    var shake = camera.GetComponent<ScreenShake>();
+        //    var shake = cam.GetComponent<ScreenShake>();
         //    shake.shake = true;
         //    Debug.Log("player slowed");
         //}
@@ -138,13 +140,13 @@ public class Movement : MonoBehaviour
         {
             Debug.Log("------- !! collided-slow");
             playerSlowed = false;
-            var shake = camera.GetComponent<ScreenShake>();
+            var shake = cam.GetComponent<ScreenShake>();
             shake.shake = false;
         }
         if (!onFurniture && collision.gameObject.layer == LayerMask.NameToLayer("Deadly"))
         {
             Debug.Log("plant sprout killed by: " + collision.gameObject.name);
-            GameManager.instance.touchKillerThings();
+            GameManager.instance.touchKillerThings(collision.gameObject);
         }
     }
 
@@ -153,7 +155,7 @@ public class Movement : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Slow"))
         {
             playerSlowed = false;
-            var shake = camera.GetComponent<ScreenShake>();
+            var shake = cam.GetComponent<ScreenShake>();
             shake.shake = false;
         }
         
@@ -167,7 +169,7 @@ public class Movement : MonoBehaviour
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Slow"))
         {
             playerSlowed = false;
-            var shake = camera.GetComponent<ScreenShake>();
+            var shake = cam.GetComponent<ScreenShake>();
             shake.shake = false;
         }
     }

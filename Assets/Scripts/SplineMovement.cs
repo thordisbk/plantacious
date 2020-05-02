@@ -38,12 +38,12 @@ public class SplineMovement : MonoBehaviour
 
     public bool drawDebugLine = true;
 
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         lastChosenCurveType = curveType;
         lastChosenClosed = closed;
         lastShowPoints = showPoints;
@@ -99,7 +99,7 @@ public class SplineMovement : MonoBehaviour
             Vector3 point = getPointAtT(t);
             Vector3 gradient = getGradientAtT(t);
             transform.position = point;
-            //rigidbody.MovePosition(point);
+            //rb.MovePosition(point);
 
             // for 3D
             Vector3 lookAtPoint = point - gradient;

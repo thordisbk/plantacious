@@ -6,7 +6,7 @@ public class FlyTrap : MonoBehaviour
 {
     public Sprite closedSprite;
     private Sprite openSprite;
-    private bool closed = false;
+    //private bool closed = false;
     
     void Start()
     {
@@ -20,14 +20,14 @@ public class FlyTrap : MonoBehaviour
 
     private void Close()
     {
-        closed = true;
+        //closed = true;
         GetComponent<SpriteRenderer>().sprite = closedSprite;
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     private void Open()
     {
-        closed = false;
+        //closed = false;
         GetComponent<SpriteRenderer>().sprite = openSprite;
         gameObject.layer = LayerMask.NameToLayer("Deadly");
     }

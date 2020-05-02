@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class TakeScreenshot : MonoBehaviour
 {
-    private Camera camera;
+    public Camera cam;
     private bool takeScreenShotOnNextFrame = false;
 
     [HideInInspector] public byte[] imageByteArray;
@@ -23,7 +23,7 @@ public class TakeScreenshot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camera = gameObject.GetComponent<Camera>();
+        //cam = gameObject.GetComponent<Camera>();
     }
 
     private void OnPostRender() {
@@ -31,22 +31,24 @@ public class TakeScreenshot : MonoBehaviour
             takeScreenShotOnNextFrame = false;
 
             // take screenshot
-            RenderTexture renderTexture = camera.targetTexture;
-            Texture2D renderResult = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.ARGB32, false);
+            RenderTexture renderTexture = cam.targetTexture;
+            // ARGB32 & RGBA32 (do not capture linerenderer), RGB24 (works but no alpha)
+            Texture2D renderResult = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGB24, false);
             Rect rect = new Rect(0, 0, renderTexture.width, renderTexture.height);
             renderResult.ReadPixels(rect, 0, 0);
             imageByteArray = renderResult.EncodeToPNG();
 
             // now save texture to png, jpg is also possible
             if (saveScreenshot) {
-                System.IO.File.WriteAllBytes(Application.dataPath + "/screenshot.png", imageByteArray);
+                string filename = "/screenshot" + System.DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".png";
+                System.IO.File.WriteAllBytes(Application.dataPath + filename, imageByteArray);
                 Debug.Log("saved screenshot.png");
                 saveScreenshot = false;
             }
             
             // cleanup
             RenderTexture.ReleaseTemporary(renderTexture);
-            camera.targetTexture = null;
+            cam.targetTexture = null;
 
             imageReady = true;
         }
@@ -54,7 +56,8 @@ public class TakeScreenshot : MonoBehaviour
 
     public void TakeScreenShot(int width, int height, bool save=false) {
         int depthBuffer = 16;
-        camera.targetTexture = RenderTexture.GetTemporary(width, height, depthBuffer);
+        if (cam == null) print("cam is null");
+        cam.targetTexture = RenderTexture.GetTemporary(width, height, depthBuffer);
         takeScreenShotOnNextFrame = true;
         if (save) saveScreenshot = true;
     }

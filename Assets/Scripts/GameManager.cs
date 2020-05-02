@@ -8,6 +8,8 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
+    public int levelNumber = 1;
+    public string gameVersion = "1.0.A";  // TODO
 
     public float[] lifeTimePerWaterDrunk;
 
@@ -48,6 +50,10 @@ public class GameManager : MonoBehaviour
     private Color lifeColor;
     private Color deathColor;
 
+    public GameObject screenshotCameraObj;
+    public Telemetry telemetry;
+    public bool useTelemetry = false;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -65,6 +71,10 @@ public class GameManager : MonoBehaviour
         initializeSettings();
         winScreenPos = new Vector3(0, 0, -35);
         plant = GameObject.Find("Plant");
+
+        screenshotCameraObj.SetActive(false);
+
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart(levelNumber, gameVersion));
     }
 
     void initializeSettings()
@@ -96,6 +106,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey("q") && Input.GetKey("w")) {
             WinGame();
         }
+        if (Input.GetKey("a") && Input.GetKeyDown("s") && gameWon) {
+            // can only be called when screenshotCameraObj has been made 
+            telemetry.SaveScreenshot();
+        }
     }
 
     // Update is called once per frame
@@ -111,13 +125,23 @@ public class GameManager : MonoBehaviour
         currLifeTime += Time.deltaTime;
         if (currLifeTime > maxLifeTime && !gameWon)
         {
-            touchKillerThings();
+            killPlantArm();
         }
     }
 
-    public void touchKillerThings() {
-        Debug.Log("plant arm: kill");
+    public void touchSlowThings(GameObject obj) {
+        Debug.Log("plant arm: slowed down");
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_obstableslow(obj.name, currLifeTime));
+    }
 
+    public void touchKillerThings(GameObject obj) {
+        Debug.Log("plant arm: touch deadly object");
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_obstabledeath(obj.name, currLifeTime));
+        killPlantArm();
+    }
+
+    private void killPlantArm() {
+        Debug.Log("plant arm: kill");
         if (thingTouched) return;
         thingTouched = true;
         // stop the player
@@ -128,11 +152,11 @@ public class GameManager : MonoBehaviour
 
         // delay
         Invoke("stopOldGrowNewStem", 1f);
-        // TODO keep the old, just change its color
     }
     
     public void touchWater(GameObject waterObj) {
         Debug.Log("plant arm: got water");
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_watersource(waterObj.name, currLifeTime));
 
         if (thingTouched) return;
         thingTouched = true;
@@ -244,9 +268,14 @@ public class GameManager : MonoBehaviour
         winPos = Camera.main.transform.position;
         Destroy(Camera.main.gameObject);
         endCam.gameObject.SetActive(true);
+        screenshotCameraObj.SetActive(true);
         
         endCam.transform.position = winPos;
         //Camera.main.transform.SetParent(null);
+
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend());
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
+
         Invoke("changeScene", 10f);
     }
 

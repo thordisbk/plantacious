@@ -8,8 +8,20 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-    public int levelNumber = 1;
-    public string gameVersion = "1.0.A";  // TODO
+    [HideInInspector] public int levelNumber = 1;
+    [HideInInspector] public string gameVersion = "1.0.A";  // TODO
+    
+    public GameObject screenshotCameraObj;
+    public Telemetry telemetry;
+    public bool useTelemetry = false;
+    // mostly for telemetry
+    [HideInInspector] public string levelStartTime;
+    [HideInInspector] public int vinesUsed;
+    [HideInInspector] public List<string> watersourcesReachedOrder;
+    [HideInInspector] public int num_watersources = 0;
+    [HideInInspector] public int num_obstacleslows = 0;
+    [HideInInspector] public int num_obstacledeaths = 0;
+    [HideInInspector] public int num_timeoutdeaths = 0;
 
     public float[] lifeTimePerWaterDrunk;
 
@@ -50,9 +62,7 @@ public class GameManager : MonoBehaviour
     private Color lifeColor;
     private Color deathColor;
 
-    public GameObject screenshotCameraObj;
-    public Telemetry telemetry;
-    public bool useTelemetry = false;
+    private bool noMoreTime = false;
 
     void Awake() {
         if (instance == null) {
@@ -63,6 +73,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         //DontDestroyOnLoad(gameObject);
+
+        levelStartTime = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+        vinesUsed = 1;  // 1 for the initial vine
+        watersourcesReachedOrder = new List<string>();
     }
 
     // Start is called before the first frame update
@@ -74,7 +88,7 @@ public class GameManager : MonoBehaviour
 
         screenshotCameraObj.SetActive(false);
 
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart(levelNumber, gameVersion));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart());
     }
 
     void initializeSettings()
@@ -123,20 +137,25 @@ public class GameManager : MonoBehaviour
     private void checkIfNoMoreTime()
     {
         currLifeTime += Time.deltaTime;
-        if (currLifeTime > maxLifeTime && !gameWon)
+        if (currLifeTime > maxLifeTime && !gameWon && !noMoreTime)
         {
+            noMoreTime = true;
+            num_timeoutdeaths++;
+            if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("timeoutdeath", "", currLifeTime, currPlayer.transform.position));
             killPlantArm();
         }
     }
 
     public void touchSlowThings(GameObject obj) {
         Debug.Log("plant arm: slowed down");
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_obstableslow(obj.name, currLifeTime));
+        num_obstacleslows++;
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacleslow", obj.name, currLifeTime, currPlayer.transform.position));
     }
 
     public void touchKillerThings(GameObject obj) {
         Debug.Log("plant arm: touch deadly object");
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_obstabledeath(obj.name, currLifeTime));
+        num_obstacledeaths++;
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacledeath", obj.name, currLifeTime, currPlayer.transform.position));
         killPlantArm();
     }
 
@@ -156,7 +175,10 @@ public class GameManager : MonoBehaviour
     
     public void touchWater(GameObject waterObj) {
         Debug.Log("plant arm: got water");
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_watersource(waterObj.name, currLifeTime));
+        watersourcesReachedOrder.Add(waterObj.name);
+        num_watersources++;
+
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("watersource", waterObj.name, currLifeTime, currPlayer.transform.position));
 
         if (thingTouched) return;
         thingTouched = true;
@@ -233,6 +255,9 @@ public class GameManager : MonoBehaviour
         currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().maxLifeTime = maxLifeTime;
 
         currLifeTime = 0;
+        noMoreTime = false;
+
+        vinesUsed++;
     }
 
     private void updateWinCam()
@@ -273,7 +298,7 @@ public class GameManager : MonoBehaviour
         endCam.transform.position = winPos;
         //Camera.main.transform.SetParent(null);
 
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend());
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("completed"));
         if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
 
         Invoke("changeScene", 10f);
@@ -281,6 +306,16 @@ public class GameManager : MonoBehaviour
 
     void changeScene() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    void OnApplicationQuit()
+    {
+        Debug.Log("Application closed.");
+
+        // unreliable
+        // if game is closed before it is completed, it is marked as "abandoned"
+        if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_levelend("abandoned"));
+        if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
     }
 }
 

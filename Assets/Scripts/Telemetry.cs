@@ -6,50 +6,37 @@ using System;
 
 public class Telemetry : MonoBehaviour
 {
-    // https://docs.google.com/forms/d/e/1FAIpQLSfoys86Fr2kGrvP_2Y8Ny5SwGVRmrTvLw1CFapbbuM8-OZ16Q/viewform
-    private const string GoogleFormBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfoys86Fr2kGrvP_2Y8Ny5SwGVRmrTvLw1CFapbbuM8-OZ16Q/";
+    private const string GoogleFormBaseUrl_levelstart = "https://docs.google.com/forms/d/e/1FAIpQLSfI2k2unmYYhXAvAkBElG1O6FsH7Z92_Vp9kbEJOHt9IDYRjA/";
+    private const string _gform_levelstart_timestamp = "entry.240265877";
+    private const string _gform_levelstart_userid = "entry.264234294";
+    private const string _gform_levelstart_levelnum = "entry.1635703984";
+    private const string _gform_levelstart_gameversion = "entry.1358507571";
 
-    private const string GoogleFormBaseUrl_levelstart = "";
-    private const string _gform_levelstart_timestamp = "";
-    private const string _gform_levelstart_userid = "";
-    private const string _gform_levelstart_levelnum = "";
-    private const string _gform_levelstart_gameversion = "";
-    private const string _gform_levelstart_ = "";
+    private const string GoogleFormBaseUrl_plantevent = "https://docs.google.com/forms/d/e/1FAIpQLScMgCv-AZyZNBQ2pMRDs3k-1ixAmkUZfG8FFiI6q7U8XQd-oQ/";
+    private const string _gform_plantevent_timestamp = "entry.1002136411";
+    private const string _gform_plantevent_userid = "entry.1071174944";
+    private const string _gform_plantevent_type = "entry.1559315566";
+    private const string _gform_plantevent_name = "entry.1340158559";
+    private const string _gform_plantevent_currlifetime = "entry.2123958303";
+    private const string _gform_plantevent_position = "entry.793292174";
 
-    private const string GoogleFormBaseUrl_watersource = "";
-    private const string _gform_watersource_timestamp = "";
-    private const string _gform_watersource_userid = "";
-    private const string _gform_watersource_name = "";
-    private const string _gform_watersource_timetoreach = "";
-    private const string _gform_watersource_position = "";
-
-    private const string GoogleFormBaseUrl_obstacleslow = "";
-    private const string _gform_obstacleslow_timestamp = "";
-    private const string _gform_obstacleslow_userid = "";
-    private const string _gform_obstacleslow_name = "";
-    private const string _gform_obstacleslow_timetoreach = "";
-
-    private const string GoogleFormBaseUrl_obstacledeath = "";
-    private const string _gform_obstacledeath_timestamp = "";
-    private const string _gform_obstacledeath_userid = "";
-    private const string _gform_obstacledeath_name = "";
-    private const string _gform_obstacledeath_timetoreach = "";
-
-    private const string GoogleFormBaseUrl_levelend = "";
-    private const string _gform_levelend_timestamp = "";
-    private const string _gform_levelend_userid = "";
-    private const string _gform_levelend_timestampgamestarted = "";
-    private const string _gform_levelend_numwatersourcesreached = "";
-    private const string _gform_levelend_numobstacleslowtouched = "";
-    private const string _gform_levelend_numobstacledeaths = "";
-    private const string _gform_levelend_numtimeddeaths = "";
-    private const string _gform_levelend_totalvines = "";
-    private const string _gform_levelend_levelresult = "";
-    private const string _gform_levelend_levelnum = "";
-    private const string _gform_levelend_gameversion = "";
+    private const string GoogleFormBaseUrl_levelend = "https://docs.google.com/forms/d/e/1FAIpQLSfoys86Fr2kGrvP_2Y8Ny5SwGVRmrTvLw1CFapbbuM8-OZ16Q/";
+    private const string _gform_levelend_timestamp = "entry.1342095277";
+    private const string _gform_levelend_userid = "entry.36639276";
+    private const string _gform_levelend_gameversion = "entry.943134332";
+    private const string _gform_levelend_timestampgamestarted = "entry.573473030";
+    private const string _gform_levelend_levelnum = "entry.133326099";
+    private const string _gform_levelend_levelresult = "entry.646337777";
+    private const string _gform_levelend_totalvines = "entry.1142069857";
+    private const string _gform_levelend_watersourcelist = "entry.1373471076";
+    private const string _gform_levelend_numwatersourcesreached = "entry.508248308";
+    private const string _gform_levelend_numobstacleslowtouched = "entry.1118109589";
+    private const string _gform_levelend_numobstacledeaths = "entry.1478690419";
+    private const string _gform_levelend_numtimeoutdeaths = "entry.809426293";
 
     private const string GoogleFormBaseUrl_image = "https://docs.google.com/forms/d/e/1FAIpQLSdyjvHloErswYvj-wZHXfWxBOi3sHlQZNMPgUwD0RqO9gDJQw/";
     private const string _gform_image_timestamp = "entry.2063940975";
+    private const string _gform_image_userid = "entry.1279706829";
     private const string _gform_image_image = "entry.936693460";
 
     private string USERID;
@@ -61,7 +48,6 @@ public class Telemetry : MonoBehaviour
     public bool saveScreenshot = true;
 
     private string timeFormatStr = "dd/MM/yyyy HH:mm:ss";
-
 
     void Start() {
         // TODO generate userid
@@ -78,73 +64,34 @@ public class Telemetry : MonoBehaviour
         }
     }
 
-    public IEnumerator SubmitGoogleForm_watersource(string name, float timeToReach) {
-        if (GoogleFormBaseUrl_watersource == "") {
+    public IEnumerator SubmitGoogleForm_plantevent(string type, string name, float currlifetime, Vector3 pos) {
+        // type should be one of the following:
+        // "watersource" "obstacledeath", "timeoutdeath", "obstacleslow"
+
+        if (GoogleFormBaseUrl_plantevent == "") {
             yield return null;
         }
         else { 
             WWWForm form = new WWWForm();
-            form.AddField(_gform_watersource_timestamp, System.DateTime.Now.ToString(timeFormatStr));
-            form.AddField(_gform_watersource_userid, USERID);
+            form.AddField(_gform_plantevent_timestamp, System.DateTime.Now.ToString(timeFormatStr));
+            form.AddField(_gform_plantevent_userid, USERID);
 
-            form.AddField(_gform_watersource_name, name);
-            form.AddField(_gform_watersource_timetoreach, timeToReach.ToString());
+            form.AddField(_gform_plantevent_type, type);
+            form.AddField(_gform_plantevent_name, name);
+            form.AddField(_gform_plantevent_currlifetime, currlifetime.ToString());
+            form.AddField(_gform_plantevent_position, pos.ToString());
 
-            string urlGoogleFormResponse = GoogleFormBaseUrl_watersource + "formResponse";
+            string urlGoogleFormResponse = GoogleFormBaseUrl_plantevent + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
             {
                 yield return www.SendWebRequest();
                 if (www.error != null) Debug.LogError(www.error);
-                else Debug.Log("log watersource: success");
+                else Debug.Log("log plantevent: success");
             }
         }
     }
 
-    public IEnumerator SubmitGoogleForm_obstableslow(string name, float timeToReach) {
-        if (GoogleFormBaseUrl_obstacleslow == "") {
-            yield return null;
-        }
-        else { 
-            WWWForm form = new WWWForm();
-            form.AddField(_gform_obstacleslow_timestamp, System.DateTime.Now.ToString(timeFormatStr));
-            form.AddField(_gform_obstacleslow_userid, USERID);
-
-            form.AddField(_gform_obstacleslow_name, name);
-            form.AddField(_gform_obstacleslow_timetoreach, timeToReach.ToString());
-
-            string urlGoogleFormResponse = GoogleFormBaseUrl_obstacleslow + "formResponse";
-            using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
-            {
-                yield return www.SendWebRequest();
-                if (www.error != null) Debug.LogError(www.error);
-                else Debug.Log("log obstacleslow: success");
-            }
-        }
-    }
-
-    public IEnumerator SubmitGoogleForm_obstabledeath(string name, float timeToReach) {
-        if (GoogleFormBaseUrl_obstacledeath == "") {
-            yield return null;
-        }
-        else { 
-            WWWForm form = new WWWForm();
-            form.AddField(_gform_obstacledeath_timestamp, System.DateTime.Now.ToString(timeFormatStr));
-            form.AddField(_gform_obstacledeath_userid, USERID);
-
-            form.AddField(_gform_obstacledeath_name, name);
-            form.AddField(_gform_obstacledeath_timetoreach, timeToReach.ToString());
-
-            string urlGoogleFormResponse = GoogleFormBaseUrl_obstacledeath + "formResponse";
-            using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
-            {
-                yield return www.SendWebRequest();
-                if (www.error != null) Debug.LogError(www.error);
-                else Debug.Log("log obstacledeath: success");
-            }
-        }
-    }
-
-    public IEnumerator SubmitGoogleForm_levelstart(int lvlNum, string version) {
+    public IEnumerator SubmitGoogleForm_levelstart() {
         if (GoogleFormBaseUrl_levelstart == "") {
             yield return null;
         }
@@ -153,8 +100,8 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_levelstart_timestamp, System.DateTime.Now.ToString(timeFormatStr));
             form.AddField(_gform_levelstart_userid, USERID);
 
-            form.AddField(_gform_levelstart_levelnum, lvlNum.ToString());
-            form.AddField(_gform_levelstart_gameversion, version);
+            form.AddField(_gform_levelstart_levelnum, GameManager.instance.levelNumber.ToString());
+            form.AddField(_gform_levelstart_gameversion, GameManager.instance.gameVersion);
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_levelstart + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
@@ -166,7 +113,10 @@ public class Telemetry : MonoBehaviour
         }
     }
 
-    public IEnumerator SubmitGoogleForm_levelend() {
+    public IEnumerator SubmitGoogleForm_levelend(string levelresult) {
+        // levelresult can be:
+        // "completed", "abandoned"
+
         if (GoogleFormBaseUrl_levelend == "") {
             yield return null;
         }
@@ -175,7 +125,16 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_levelend_timestamp, System.DateTime.Now.ToString(timeFormatStr));
             form.AddField(_gform_levelend_userid, USERID);
 
-            //
+            form.AddField(_gform_levelend_gameversion, GameManager.instance.gameVersion);
+            form.AddField(_gform_levelend_timestampgamestarted, GameManager.instance.levelStartTime);
+            form.AddField(_gform_levelend_levelnum, GameManager.instance.levelNumber.ToString());
+            form.AddField(_gform_levelend_levelresult, levelresult);
+            form.AddField(_gform_levelend_totalvines, GameManager.instance.vinesUsed);
+            form.AddField(_gform_levelend_watersourcelist, String.Join(",", GameManager.instance.watersourcesReachedOrder.ToArray()));
+            form.AddField(_gform_levelend_numwatersourcesreached, GameManager.instance.num_watersources);
+            form.AddField(_gform_levelend_numobstacleslowtouched, GameManager.instance.num_obstacleslows);
+            form.AddField(_gform_levelend_numobstacledeaths, GameManager.instance.num_obstacledeaths);
+            form.AddField(_gform_levelend_numtimeoutdeaths, GameManager.instance.num_timeoutdeaths);
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_levelend + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
@@ -207,6 +166,7 @@ public class Telemetry : MonoBehaviour
             // create a Web Form, this will be the POST method's data
             var form = new WWWForm();
             form.AddField(_gform_image_timestamp, System.DateTime.Now.ToString(timeFormatStr));
+            form.AddField(_gform_image_userid, USERID);
             //form.AddBinaryData("entry.936693460", takeScreenshot.imageByteArray, "screenshot.png", "image/png");  // or jpg
             form.AddField(_gform_image_image, imageDataString);
 

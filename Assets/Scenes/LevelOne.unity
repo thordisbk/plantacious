@@ -2299,7 +2299,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -7678,6 +7678,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNumber: 1
   gameVersion: 1.0.A
+  screenshotCameraObj: {fileID: 1621453503}
+  telemetry: {fileID: 1471584831}
+  useTelemetry: 0
+  levelStartTime: 
+  vinesUsed: 0
+  watersourcesReachedOrder: []
+  num_watersources: 0
+  num_obstacleslows: 0
+  num_obstacledeaths: 0
+  num_timeoutdeaths: 0
   lifeTimePerWaterDrunk: []
   waterSlider: {fileID: 2068542937}
   lifespanSlider: {fileID: 1339286346}
@@ -7695,9 +7705,6 @@ MonoBehaviour:
   endCam: {fileID: 680281859}
   winScreenPanTime: 5
   fadeToBlackTime: 3
-  screenshotCameraObj: {fileID: 1621453503}
-  telemetry: {fileID: 1471584831}
-  useTelemetry: 1
 --- !u!4 &2072061274
 Transform:
   m_ObjectHideFlags: 0

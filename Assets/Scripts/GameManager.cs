@@ -5,15 +5,21 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+
+
 public class GameManager : MonoBehaviour
 {
+    private string thisGameVersion = "1.0.T";  // TODO A/B, T for testing
+    
+
     public static GameManager instance = null;
     [HideInInspector] public int levelNumber = 1;
-    [HideInInspector] public string gameVersion = "1.0.A";  // TODO
+    [HideInInspector] public string gameVersion;
     
     public GameObject screenshotCameraObj;
     public Telemetry telemetry;
     public bool useTelemetry = false;
+    public bool saveEndScreenshot = false;
     // mostly for telemetry
     [HideInInspector] public string levelStartTime;
     [HideInInspector] public int vinesUsed;
@@ -88,6 +94,7 @@ public class GameManager : MonoBehaviour
 
         screenshotCameraObj.SetActive(false);
 
+        gameVersion = thisGameVersion;
         if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart());
     }
 
@@ -300,6 +307,9 @@ public class GameManager : MonoBehaviour
 
         if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("completed"));
         if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
+
+        // for testing
+        if (saveEndScreenshot) telemetry.SaveScreenshot();
 
         Invoke("changeScene", 10f);
     }

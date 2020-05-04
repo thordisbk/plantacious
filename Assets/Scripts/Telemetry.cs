@@ -129,12 +129,12 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_levelend_timestampgamestarted, GameManager.instance.levelStartTime);
             form.AddField(_gform_levelend_levelnum, GameManager.instance.levelNumber.ToString());
             form.AddField(_gform_levelend_levelresult, levelresult);
-            form.AddField(_gform_levelend_totalvines, GameManager.instance.vinesUsed);
+            form.AddField(_gform_levelend_totalvines, GameManager.instance.vinesUsed.ToString());
             form.AddField(_gform_levelend_watersourcelist, String.Join(",", GameManager.instance.watersourcesReachedOrder.ToArray()));
-            form.AddField(_gform_levelend_numwatersourcesreached, GameManager.instance.num_watersources);
-            form.AddField(_gform_levelend_numobstacleslowtouched, GameManager.instance.num_obstacleslows);
-            form.AddField(_gform_levelend_numobstacledeaths, GameManager.instance.num_obstacledeaths);
-            form.AddField(_gform_levelend_numtimeoutdeaths, GameManager.instance.num_timeoutdeaths);
+            form.AddField(_gform_levelend_numwatersourcesreached, GameManager.instance.num_watersources.ToString());
+            form.AddField(_gform_levelend_numobstacleslowtouched, GameManager.instance.num_obstacleslows.ToString());
+            form.AddField(_gform_levelend_numobstacledeaths, GameManager.instance.num_obstacledeaths.ToString());
+            form.AddField(_gform_levelend_numtimeoutdeaths, GameManager.instance.num_timeoutdeaths.ToString());
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_levelend + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))

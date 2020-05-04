@@ -247,7 +247,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0895d3abd7990c5489b2bf872256ccb8, type: 3}
-  m_Color: {r: 0.55429566, g: 0.7830189, b: 0.32133323, a: 1}
+  m_Color: {r: 0.60735583, g: 0.764151, b: 0.45056072, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -726,31 +726,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.y
-      value: 0.12512779
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 4.1282177
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.x
-      value: 0.09384632
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.8748722
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3787309653c3094db2709abd26eb869, type: 3}
@@ -1613,31 +1588,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 89.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.y
-      value: 0.13861227
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 4.11758
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.x
-      value: 0.08449221
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.8830112
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3787309653c3094db2709abd26eb869, type: 3}
@@ -3228,31 +3178,6 @@ PrefabInstance:
     - target: {fileID: 5804104539574764824, guid: e3787309653c3094db2709abd26eb869,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 4.117566
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.y
-      value: 0.11678457
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Offset.x
-      value: 0.05197467
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.8960507
-      objectReference: {fileID: 0}
-    - target: {fileID: 8586186738890912857, guid: e3787309653c3094db2709abd26eb869,
-        type: 3}
-      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5545,6 +5470,8 @@ MonoBehaviour:
   uploadFile: 0
   takeScreenshot: {fileID: 1621453504}
   saveScreenshot: 1
+  resWidth: 640
+  redHeight: 480
 --- !u!4 &1471584832
 Transform:
   m_ObjectHideFlags: 0
@@ -6371,7 +6298,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

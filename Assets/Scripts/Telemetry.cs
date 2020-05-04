@@ -49,6 +49,10 @@ public class Telemetry : MonoBehaviour
 
     private string timeFormatStr = "dd/MM/yyyy HH:mm:ss";
 
+    [Header("Image resolution [4:3]")]
+    public int resWidth = 640;
+    public int redHeight = 480;
+
     void Start() {
         // TODO generate userid
         System.Guid myGUID = System.Guid.NewGuid();
@@ -152,8 +156,7 @@ public class Telemetry : MonoBehaviour
             yield return null;
         }
         else { 
-            //print("Screen width: " + Screen.width + " and height: " + Screen.height);
-            takeScreenshot.TakeScreenShot(Screen.width, Screen.height, saveScreenshot);
+            takeScreenshot.TakeScreenShot(resWidth, redHeight, true);
 
             // wait until the image is ready (so takeScreenshot.imageByteArray won't be empty)
             while (takeScreenshot.imageReady == false) {
@@ -182,10 +185,8 @@ public class Telemetry : MonoBehaviour
     }
 
     public void SaveScreenshot() {
-        takeScreenshot.TakeScreenShot(Screen.width, Screen.height, true);
+        // using Screen width and height causes the image to be too large to send to Google Forms
+        //print("Screen width: " + Screen.width + " and height: " + Screen.height);
+        takeScreenshot.TakeScreenShot(resWidth, redHeight, true);
     }
-
-
-    
-
 }

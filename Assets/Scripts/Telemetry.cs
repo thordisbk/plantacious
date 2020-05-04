@@ -156,7 +156,7 @@ public class Telemetry : MonoBehaviour
             yield return null;
         }
         else { 
-            takeScreenshot.TakeScreenShot(resWidth, redHeight, true);
+            takeScreenshot.TakeScreenShot(resWidth, redHeight, false);
 
             // wait until the image is ready (so takeScreenshot.imageByteArray won't be empty)
             while (takeScreenshot.imageReady == false) {

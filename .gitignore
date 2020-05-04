@@ -9,6 +9,9 @@ Assets/AssetStoreTools*
 *.png
 *.png.meta
 
+# mac
+*/.DS_Store
+
 # Visual Studio cache directory
 .vs/
 

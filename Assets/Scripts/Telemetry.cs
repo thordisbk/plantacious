@@ -19,6 +19,7 @@ public class Telemetry : MonoBehaviour
     private const string _gform_plantevent_name = "entry.1340158559";
     private const string _gform_plantevent_currlifetime = "entry.2123958303";
     private const string _gform_plantevent_position = "entry.793292174";
+    private const string _gform_plantevent_levelNum = "entry.2123893607";
 
     private const string GoogleFormBaseUrl_levelend = "https://docs.google.com/forms/d/e/1FAIpQLSfoys86Fr2kGrvP_2Y8Ny5SwGVRmrTvLw1CFapbbuM8-OZ16Q/";
     private const string _gform_levelend_timestamp = "entry.1342095277";
@@ -49,6 +50,8 @@ public class Telemetry : MonoBehaviour
 
     private string timeFormatStr = "dd/MM/yyyy HH:mm:ss";
 
+    public bool dontSend = false;  // eg urls == ""
+
     [Header("Image resolution [4:3]")]
     public int resWidth = 640;
     public int redHeight = 480;
@@ -68,11 +71,11 @@ public class Telemetry : MonoBehaviour
         }
     }
 
-    public IEnumerator SubmitGoogleForm_plantevent(string type, string name, float currlifetime, Vector3 pos) {
+    public IEnumerator SubmitGoogleForm_plantevent(string type, string name, float currlifetime, Vector3 pos, int levelNum) {
         // type should be one of the following:
         // "watersource" "obstacledeath", "timeoutdeath", "obstacleslow"
 
-        if (GoogleFormBaseUrl_plantevent == "") {
+        if (dontSend) {
             yield return null;
         }
         else { 
@@ -84,6 +87,7 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_plantevent_name, name);
             form.AddField(_gform_plantevent_currlifetime, currlifetime.ToString());
             form.AddField(_gform_plantevent_position, pos.ToString());
+            form.AddField(_gform_plantevent_levelNum, levelNum);
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_plantevent + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
@@ -95,8 +99,8 @@ public class Telemetry : MonoBehaviour
         }
     }
 
-    public IEnumerator SubmitGoogleForm_levelstart() {
-        if (GoogleFormBaseUrl_levelstart == "") {
+    public IEnumerator SubmitGoogleForm_levelstart(int levelNum) {
+        if (dontSend) {
             yield return null;
         }
         else { 
@@ -104,7 +108,7 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_levelstart_timestamp, System.DateTime.Now.ToString(timeFormatStr));
             form.AddField(_gform_levelstart_userid, USERID);
 
-            form.AddField(_gform_levelstart_levelnum, GameManager.instance.levelNumber.ToString());
+            form.AddField(_gform_levelstart_levelnum, levelNum);
             form.AddField(_gform_levelstart_gameversion, GameManager.instance.gameVersion);
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_levelstart + "formResponse";
@@ -117,11 +121,12 @@ public class Telemetry : MonoBehaviour
         }
     }
 
-    public IEnumerator SubmitGoogleForm_levelend(string levelresult) {
+    public IEnumerator SubmitGoogleForm_levelend(string levelresult, string lvlStartTime, int levelNum, int numVines, List<string> watersourcesReachedOrder,
+                                                 int num_ws, int num_os, int num_od, int num_td) {
         // levelresult can be:
         // "completed", "abandoned"
 
-        if (GoogleFormBaseUrl_levelend == "") {
+        if (dontSend) {
             yield return null;
         }
         else { 
@@ -130,15 +135,15 @@ public class Telemetry : MonoBehaviour
             form.AddField(_gform_levelend_userid, USERID);
 
             form.AddField(_gform_levelend_gameversion, GameManager.instance.gameVersion);
-            form.AddField(_gform_levelend_timestampgamestarted, GameManager.instance.levelStartTime);
-            form.AddField(_gform_levelend_levelnum, GameManager.instance.levelNumber.ToString());
+            form.AddField(_gform_levelend_timestampgamestarted, lvlStartTime);
+            form.AddField(_gform_levelend_levelnum, levelNum);
             form.AddField(_gform_levelend_levelresult, levelresult);
-            form.AddField(_gform_levelend_totalvines, GameManager.instance.vinesUsed.ToString());
+            form.AddField(_gform_levelend_totalvines, numVines);
             form.AddField(_gform_levelend_watersourcelist, String.Join(",", GameManager.instance.watersourcesReachedOrder.ToArray()));
-            form.AddField(_gform_levelend_numwatersourcesreached, GameManager.instance.num_watersources.ToString());
-            form.AddField(_gform_levelend_numobstacleslowtouched, GameManager.instance.num_obstacleslows.ToString());
-            form.AddField(_gform_levelend_numobstacledeaths, GameManager.instance.num_obstacledeaths.ToString());
-            form.AddField(_gform_levelend_numtimeoutdeaths, GameManager.instance.num_timeoutdeaths.ToString());
+            form.AddField(_gform_levelend_numwatersourcesreached, num_ws);
+            form.AddField(_gform_levelend_numobstacleslowtouched, num_os);
+            form.AddField(_gform_levelend_numobstacledeaths, num_od);
+            form.AddField(_gform_levelend_numtimeoutdeaths, num_td);
 
             string urlGoogleFormResponse = GoogleFormBaseUrl_levelend + "formResponse";
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
@@ -152,7 +157,7 @@ public class Telemetry : MonoBehaviour
 
     // This will get our upload url and on the response we will start our coroutine to take the screenshot
     public IEnumerator SubmitGoogleForm_UploadImage() {
-        if (GoogleFormBaseUrl_image == "") {
+        if (dontSend) {
             yield return null;
         }
         else { 

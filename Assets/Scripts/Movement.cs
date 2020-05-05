@@ -23,6 +23,8 @@ public class Movement : MonoBehaviour
     private float drynessLevel;
     private SpriteRenderer sr;
 
+    private float lifeTime = 0f;
+
     // set to true when on top of table, bed, etc to not collide 
     //  with moving things under the furniture (rats, roomba, etc)
     public bool onFurniture = false;
@@ -33,6 +35,8 @@ public class Movement : MonoBehaviour
         currentSpeed = normalSpeed;
         sr = GetComponent<SpriteRenderer>();
         ani = GetComponent<Animator>();
+
+        lifeTime = 0f;
     }
 
     public float getDrynessLevel()
@@ -43,6 +47,7 @@ public class Movement : MonoBehaviour
     void ApplyDyingColor()
     {
         if (dead || stageWon) return;
+
         timeSinceSpawn += Time.deltaTime;
         drynessLevel = timeSinceSpawn / maxLifeTime;
         Color rootHeadColor = Color.Lerp(lifeColor, deathColor, drynessLevel);
@@ -61,13 +66,20 @@ public class Movement : MonoBehaviour
             transform.Rotate(Vector3.forward, -rotSpeed * Time.deltaTime);
         }
 
-        transform.GetChild(0).rotation = Quaternion.identity;
+        //transform.GetChild(0).rotation = Quaternion.identity;
+        cam.transform.rotation = Quaternion.identity;
+
+        lifeTime += Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
+        if (lifeTime < GameManager.instance.waitBeforeMoving) return;
+
         if (dead || stageWon) return;
+        
         ApplyDyingColor();
+        
         if (playerSlowed)
         {
             ani.SetBool("isSlowed", playerSlowed);

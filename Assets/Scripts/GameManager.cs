@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 using TMPro;
 
 
-
 public class GameManager : MonoBehaviour
 {
     private string thisGameVersion = "1.0.T";  // TODO A/B, T for testing
     
-
     public static GameManager instance = null;
     [HideInInspector] public int levelNumber = 1;
     [HideInInspector] public string gameVersion;
@@ -29,30 +27,41 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int num_obstacledeaths = 0;
     [HideInInspector] public int num_timeoutdeaths = 0;
 
-    public float[] lifeTimePerWaterDrunk;
+    public float waitBeforeMoving = 0f;  // how long to wait before moving
 
+    [Header("Levels")]
+    public GameObject level1;
+    public GameObject level2;
+    public GameObject level3;
+
+    [HideInInspector] public List<float> lifeTimePerWaterDrunk;
+
+    [Header("Sliders")]
     public Slider waterSlider;
     private float sliderIncValue;
     //private bool raisingWaterSlider = false;
     //private float raisingWaterSliderValue = 0f;
-
     public Slider lifespanSlider;
 
-    public int availableWaterSources = 4;
+    [HideInInspector] public int availableWaterSources = 4;
     private int waterDrunkCounter = 0;
     private float maxLifeTime = 5;
     private float currLifeTime = 0;
 
+    [Header("Current values")]
     public GameObject currPlayer;
-    public GameObject curvedLineRendererPrefab;
+    public GameObject currCurvedLineRenderer;
     public GameObject plant;
+
     private Vector3[] spawnPoints;
 
+    [Header("Prefabs")]
     public GameObject playerPrefab;
-    public GameObject currCurvedLineRenderer;
+    public GameObject curvedLineRendererPrefab;
 
     private bool thingTouched = false;
 
+    [Header("For end")]
     //public TextMeshProUGUI winText;
     public TextMeshProUGUI winText_0;
     public TextMeshProUGUI winText_1;
@@ -61,14 +70,18 @@ public class GameManager : MonoBehaviour
     private Vector3 winScreenPos;
     public float winScreenPanTime = 5;
     public float fadeToBlackTime = 3;
+
     private bool gameWon = false;
     private bool gameWinScreenEnded = false;
     private float winTime;
     private Vector3 winPos;
+    
     private Color lifeColor;
     private Color deathColor;
 
     private bool noMoreTime = false;
+
+    private string dateFormat = "dd/MM/yyyy HH:mm:ss";
 
     void Awake() {
         if (instance == null) {
@@ -80,38 +93,158 @@ public class GameManager : MonoBehaviour
         }
         //DontDestroyOnLoad(gameObject);
 
-        levelStartTime = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
         vinesUsed = 1;  // 1 for the initial vine
         watersourcesReachedOrder = new List<string>();
     }
 
+    void Start() {
+        levelNumber = 0;
+        InitializeLevel();
+    }
+
+    void NextLevel() {
+        InitializeLevel();
+    }
+
     // Start is called before the first frame update
-    void Start()
+    void InitializeLevel()
     {
-        initializeSettings();
+        levelStartTime = System.DateTime.Now.ToString(dateFormat);
+        vinesUsed = 0;
+        watersourcesReachedOrder.Clear();
+        num_watersources = 0;
+        num_obstacleslows = 0;
+        num_obstacledeaths = 0;
+        num_timeoutdeaths = 0;
+
+        waterDrunkCounter = 0;
+
+        thingTouched = false;
+
+        //Destroy(currPlayer);
+        //Destroy(currCurvedLineRenderer);
+        //Destroy(plant);
+
+        levelNumber++;
+        Debug.Log("Initializing level " + levelNumber);
+
+        // destroy all active vines
+        if (levelNumber > 1) {
+            GameObject[] vinesInLevel = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject obj in vinesInLevel) {
+                // Debug.Log("destroying " + obj.name);
+                Destroy(obj);
+            }
+        }
+
+        if (levelNumber == 1) {
+            level1.SetActive(true);
+            level2.SetActive(false);
+            level3.SetActive(false);
+            initializeSettings_lvl1();
+        }
+        else if (levelNumber == 2) {
+            level1.SetActive(false);
+            level2.SetActive(true);
+            level3.SetActive(false);
+            initializeSettings_lvl2();
+        }
+        else if (levelNumber == 3) {
+            level1.SetActive(false);
+            level2.SetActive(false);
+            level3.SetActive(true);
+            initializeSettings_lvl3();
+        }
+
         winScreenPos = new Vector3(0, 0, -35);
-        plant = GameObject.Find("Plant");
 
         screenshotCameraObj.SetActive(false);
 
         gameVersion = thisGameVersion;
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart());
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelstart(levelNumber));
+
     }
 
-    void initializeSettings()
+    void initializeSettings_lvl1()
     {
+        availableWaterSources = 2;
+
+        currPlayer = GameObject.Find("PlayerPlant");
+        currCurvedLineRenderer = GameObject.Find("RootLineRenderer");
+        plant = GameObject.Find("Plant");
+
         sliderIncValue = 1f / (float)availableWaterSources;
         waterSlider.value = 0f;
 
         //origPlayerPos = currPlayer.transform.position;
-        lifeTimePerWaterDrunk = new float[availableWaterSources+1];
-        lifeTimePerWaterDrunk[0] = 5;
-        lifeTimePerWaterDrunk[1] = 10;
-        lifeTimePerWaterDrunk[2] = 15;
-        lifeTimePerWaterDrunk[3] = 25;
-        lifeTimePerWaterDrunk[4] = 30;
-        lifeTimePerWaterDrunk[5] = 35;
-        lifeTimePerWaterDrunk[6] = 40;
+        lifeTimePerWaterDrunk.Clear();
+        lifeTimePerWaterDrunk = new List<float>(availableWaterSources+1);
+        lifeTimePerWaterDrunk.Add(5f);
+        lifeTimePerWaterDrunk.Add(10f);
+        //foreach (float val in lifeTimePerWaterDrunk) Debug.Log("val: " + val);
+        //lifeTimePerWaterDrunk[0] = 5;
+        // TODO this needs to be changed if water sources are added
+
+        maxLifeTime = lifeTimePerWaterDrunk[0];
+        currPlayer.GetComponent<Movement>().maxLifeTime = maxLifeTime;
+        currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().maxLifeTime = maxLifeTime;
+
+        lifeColor = currPlayer.GetComponent<Movement>().lifeColor;
+        deathColor = currPlayer.GetComponent<Movement>().deathColor;
+    }
+
+    void initializeSettings_lvl2()
+    {
+        availableWaterSources = 4;
+
+        currPlayer = GameObject.Find("PlayerPlant");
+        currCurvedLineRenderer = GameObject.Find("RootLineRenderer");
+        plant = GameObject.Find("Plant");
+
+        sliderIncValue = 1f / (float)availableWaterSources;
+        waterSlider.value = 0f;
+
+        //origPlayerPos = currPlayer.transform.position;
+        lifeTimePerWaterDrunk.Clear();
+        lifeTimePerWaterDrunk = new List<float>(availableWaterSources+1);
+        lifeTimePerWaterDrunk.Add(5f);
+        lifeTimePerWaterDrunk.Add(6f);
+        lifeTimePerWaterDrunk.Add(9f);
+        lifeTimePerWaterDrunk.Add(12f);
+        //foreach (float val in lifeTimePerWaterDrunk) Debug.Log("val: " + val);
+        // TODO this needs to be changed if water sources are added
+
+        maxLifeTime = lifeTimePerWaterDrunk[0];
+        currPlayer.GetComponent<Movement>().maxLifeTime = maxLifeTime;
+        currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().maxLifeTime = maxLifeTime;
+
+        lifeColor = currPlayer.GetComponent<Movement>().lifeColor;
+        deathColor = currPlayer.GetComponent<Movement>().deathColor;
+
+    }
+
+    void initializeSettings_lvl3()
+    {
+        availableWaterSources = 6;
+
+        currPlayer = GameObject.Find("PlayerPlant");
+        currCurvedLineRenderer = GameObject.Find("RootLineRenderer");
+        plant = GameObject.Find("Plant");
+
+        sliderIncValue = 1f / (float)availableWaterSources;
+        waterSlider.value = 0f;
+
+        //origPlayerPos = currPlayer.transform.position;
+        lifeTimePerWaterDrunk.Clear();
+        lifeTimePerWaterDrunk = new List<float>(availableWaterSources+1); // 
+        lifeTimePerWaterDrunk.Add(5f);
+        lifeTimePerWaterDrunk.Add(10f);
+        lifeTimePerWaterDrunk.Add(15f);
+        lifeTimePerWaterDrunk.Add(25f);
+        lifeTimePerWaterDrunk.Add(30f);
+        lifeTimePerWaterDrunk.Add(35f);
+        lifeTimePerWaterDrunk.Add(40f);
+        //foreach (float val in lifeTimePerWaterDrunk) Debug.Log("val: " + val);
         // TODO this needs to be changed if water sources are added
 
         maxLifeTime = lifeTimePerWaterDrunk[0];
@@ -124,7 +257,7 @@ public class GameManager : MonoBehaviour
     }
 
     void Update() {
-        if (Input.GetKey("q") && Input.GetKey("w")) {
+        if (Input.GetKey("q") && Input.GetKeyDown("w")) {
             WinGame();
         }
         if (Input.GetKey("a") && Input.GetKeyDown("s") && gameWon) {
@@ -148,7 +281,7 @@ public class GameManager : MonoBehaviour
         {
             noMoreTime = true;
             num_timeoutdeaths++;
-            if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("timeoutdeath", "", currLifeTime, currPlayer.transform.position));
+            if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("timeoutdeath", "", currLifeTime, currPlayer.transform.position, levelNumber));
             killPlantArm();
         }
     }
@@ -156,13 +289,13 @@ public class GameManager : MonoBehaviour
     public void touchSlowThings(GameObject obj) {
         Debug.Log("plant arm: slowed down");
         num_obstacleslows++;
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacleslow", obj.name, currLifeTime, currPlayer.transform.position));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacleslow", obj.name, currLifeTime, currPlayer.transform.position, levelNumber));
     }
 
     public void touchKillerThings(GameObject obj) {
         Debug.Log("plant arm: touch deadly object");
         num_obstacledeaths++;
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacledeath", obj.name, currLifeTime, currPlayer.transform.position));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("obstacledeath", obj.name, currLifeTime, currPlayer.transform.position, levelNumber));
         killPlantArm();
     }
 
@@ -177,15 +310,16 @@ public class GameManager : MonoBehaviour
         currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().isDead();
 
         // delay
-        Invoke("stopOldGrowNewStem", 1f);
+        Invoke("stopOldGrowNewVine", 1f);
     }
     
     public void touchWater(GameObject waterObj) {
-        Debug.Log("plant arm: got water");
+        Debug.Log("plant arm: got water (" + currLifeTime + " s)");
         watersourcesReachedOrder.Add(waterObj.name);
         num_watersources++;
+        currLifeTime = 0f;
 
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("watersource", waterObj.name, currLifeTime, currPlayer.transform.position));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_plantevent("watersource", waterObj.name, currLifeTime, currPlayer.transform.position, levelNumber));
 
         if (thingTouched) return;
         thingTouched = true;
@@ -214,16 +348,17 @@ public class GameManager : MonoBehaviour
         Destroy(waterObj.GetComponent<BoxCollider2D>());
 
         if (waterDrunkCounter == availableWaterSources) {
-            // TODO pan out or something
             Invoke("WinGame", 1f);
+            //WinGame();
             return;
         }
 
         // delay
-        Invoke("stopOldGrowNewStem", 1f);
+        Invoke("stopOldGrowNewVine", 1f);
     }
 
-    private void stopOldGrowNewStem() {
+    private void stopOldGrowNewVine() {
+        Debug.Log("stop-old-grow-new-vine");
         Vector3 spawnPoint = plant.transform.position;
         spawnPoint.y += 0.5f;
 
@@ -242,28 +377,34 @@ public class GameManager : MonoBehaviour
 
         Vector3 theRot = new Vector3(0f, 0f, Random.Range(-15f, 15f));
         int i = Random.Range(0, 6);
-        Vector3 newStemPos = poss[i];
-        Quaternion newStemRot = Quaternion.Euler(theRot);
-        Vector3 newStemPosLR = newStemPos;
+        Vector3 newVinePos = poss[i];
+        Quaternion newVineRot = Quaternion.Euler(theRot);
+        Vector3 newVinePosLR = newVinePos;
 
+        StopOldVine();
+        GrowNewVine(newVinePos, newVineRot, newVinePosLR);
+    }
+
+    private void StopOldVine() {
         // player
         Destroy(currPlayer.GetComponent<Movement>());
         Destroy(currPlayer.GetComponent<Transform>().GetChild(0).gameObject);
-        currPlayer = Instantiate(playerPrefab, newStemPos, newStemRot);
+        thingTouched = false;
+        noMoreTime = false;
+    }
+
+    private void GrowNewVine(Vector3 newVinePos, Quaternion newVineRot, Vector3 newVinePosLR) {
+        currPlayer = Instantiate(playerPrefab, newVinePos, newVineRot);
         // set new line renderer
-        currCurvedLineRenderer = Instantiate(curvedLineRendererPrefab, newStemPosLR, Quaternion.identity);
+        currCurvedLineRenderer = Instantiate(curvedLineRendererPrefab, newVinePosLR, Quaternion.identity);
         currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().plantGrowthGO = currPlayer.GetComponent<Transform>().GetChild(1).gameObject;
         currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().plantFaceGO = currPlayer.GetComponent<Transform>().GetChild(2).gameObject;
     
-        thingTouched = false;
-
         maxLifeTime = lifeTimePerWaterDrunk[waterDrunkCounter];
         currPlayer.GetComponent<Movement>().maxLifeTime = maxLifeTime;
         currCurvedLineRenderer.GetComponent<CurvedLineRenderer>().maxLifeTime = maxLifeTime;
 
         currLifeTime = 0;
-        noMoreTime = false;
-
         vinesUsed++;
     }
 
@@ -294,6 +435,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void WinGame() {
+        if (levelNumber == 1 || levelNumber == 2) {
+            if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("completed", levelStartTime, levelNumber, vinesUsed, watersourcesReachedOrder, 
+                                                                        num_watersources, num_obstacleslows, num_obstacledeaths, num_timeoutdeaths));
+            NextLevel();
+            return;
+        }
         if (gameWon) return;
         gameWon = true;
         winTime = Time.fixedTime;
@@ -305,7 +452,8 @@ public class GameManager : MonoBehaviour
         endCam.transform.position = winPos;
         //Camera.main.transform.SetParent(null);
 
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("completed"));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("completed", levelStartTime, levelNumber, vinesUsed, watersourcesReachedOrder, 
+                                                                        num_watersources, num_obstacleslows, num_obstacledeaths, num_timeoutdeaths));
         if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
 
         // for testing
@@ -324,7 +472,8 @@ public class GameManager : MonoBehaviour
 
         // unreliable
         // if game is closed before it is completed, it is marked as "abandoned"
-        if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_levelend("abandoned"));
+        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("abandoned", levelStartTime, levelNumber, vinesUsed, watersourcesReachedOrder, 
+                                                                        num_watersources, num_obstacleslows, num_obstacledeaths, num_timeoutdeaths));
         if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
     }
 }

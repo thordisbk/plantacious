@@ -34,18 +34,28 @@ public class CurvedLineRenderer : MonoBehaviour
     private bool o3goingUp = true;
     private bool o7goingUp = false;
 
+    private float lifeTime = 0f;
+
     public void Start()
     {
         this.transform.position = plantGrowthGO.transform.position;
         leafGrower = GetComponent<LeafGrower>();
         AddNewPointToList(this.transform.position);
+
+        lifeTime = 0f;
     }
+
     // Update is called once per frame
+    void Update() {
+        lifeTime += Time.deltaTime;
+    }
+    
     public void FixedUpdate()
     {
         GetPoints();
         SetPointsToLine();
         MaybeAddPoint();
+        //if (lifeTime < GameManager.instance.waitBeforeMoving) return;
         ApplyColor();
     }
 

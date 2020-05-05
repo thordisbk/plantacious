@@ -8,7 +8,11 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    private string thisGameVersion = "1.0.T";  // TODO A/B, T for testing
+    // if thisGameVersion contains "B" then the game will use level3_B
+    // else it will use level3_A
+    // A (version A), B (version B), T (version T for Testing)
+    private string thisGameVersion = "1.1.T";  // T for testing
+    private bool versionA = true;
     
     public static GameManager instance = null;
     [HideInInspector] public int levelNumber = 1;
@@ -32,7 +36,8 @@ public class GameManager : MonoBehaviour
     [Header("Levels")]
     public GameObject level1;
     public GameObject level2;
-    public GameObject level3;
+    public GameObject level3_A;
+    public GameObject level3_B;
 
     [HideInInspector] public List<float> lifeTimePerWaterDrunk;
 
@@ -95,6 +100,16 @@ public class GameManager : MonoBehaviour
 
         vinesUsed = 1;  // 1 for the initial vine
         watersourcesReachedOrder = new List<string>();
+
+        if (thisGameVersion.Contains("B")) {
+            // then this is not version A
+            Debug.Log("This is version B");
+            versionA = false;
+        }
+        else {
+            Debug.Log("This is version A");
+            versionA = true;
+        }
     }
 
     void Start() {
@@ -141,19 +156,25 @@ public class GameManager : MonoBehaviour
         if (levelNumber == 1) {
             level1.SetActive(true);
             level2.SetActive(false);
-            level3.SetActive(false);
+            level3_A.SetActive(false);
+            level3_B.SetActive(false);
+
             initializeSettings_lvl1();
         }
         else if (levelNumber == 2) {
             level1.SetActive(false);
             level2.SetActive(true);
-            level3.SetActive(false);
+            level3_A.SetActive(false);
+            level3_B.SetActive(false);
+
             initializeSettings_lvl2();
         }
         else if (levelNumber == 3) {
             level1.SetActive(false);
             level2.SetActive(false);
-            level3.SetActive(true);
+            if (versionA) level3_A.SetActive(true);
+            else level3_B.SetActive(true);
+
             initializeSettings_lvl3();
         }
 

@@ -48,7 +48,7 @@ public class Telemetry : MonoBehaviour
     public TakeScreenshot takeScreenshot;
     public bool saveScreenshot = true;
 
-    private string timeFormatStr = "dd/MM/yyyy HH:mm:ss";
+    private string timeFormatStr = "dd/MM/yyyy HH:mm:ss \"GMT\"zzz";
 
     public bool dontSend = false;  // eg urls == ""
 

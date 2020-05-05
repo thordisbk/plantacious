@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     private bool noMoreTime = false;
 
-    private string dateFormat = "dd/MM/yyyy HH:mm:ss";
+    private string dateFormat = "dd/MM/yyyy HH:mm:ss \"GMT\"zzz";
 
     void Awake() {
         if (instance == null) {
@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
     void InitializeLevel()
     {
         levelStartTime = System.DateTime.Now.ToString(dateFormat);
+        print(levelStartTime);
         vinesUsed = 0;
         watersourcesReachedOrder.Clear();
         num_watersources = 0;
@@ -238,12 +239,12 @@ public class GameManager : MonoBehaviour
         lifeTimePerWaterDrunk.Clear();
         lifeTimePerWaterDrunk = new List<float>(availableWaterSources+1); // 
         lifeTimePerWaterDrunk.Add(5f);
-        lifeTimePerWaterDrunk.Add(10f);
+        lifeTimePerWaterDrunk.Add(12f);
         lifeTimePerWaterDrunk.Add(15f);
-        lifeTimePerWaterDrunk.Add(25f);
         lifeTimePerWaterDrunk.Add(30f);
         lifeTimePerWaterDrunk.Add(35f);
         lifeTimePerWaterDrunk.Add(40f);
+        lifeTimePerWaterDrunk.Add(45f);
         //foreach (float val in lifeTimePerWaterDrunk) Debug.Log("val: " + val);
         // TODO this needs to be changed if water sources are added
 

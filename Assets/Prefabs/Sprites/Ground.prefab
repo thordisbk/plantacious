@@ -132,6 +132,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundRBM
       objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -237,6 +242,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundLB
+      objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
@@ -344,6 +354,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundRTM
       objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -449,6 +464,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundRB
+      objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
@@ -556,6 +576,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundLTM
       objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -661,6 +686,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundLBM
+      objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
@@ -768,6 +798,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundLT
       objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -873,6 +908,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundRT
+      objectReference: {fileID: 0}
+    - target: {fileID: 393027126404508057, guid: a16026b9ce0860249aa95c2a631758b3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5804104539574764824, guid: a16026b9ce0860249aa95c2a631758b3,
         type: 3}

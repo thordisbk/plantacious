@@ -239,12 +239,11 @@ public class GameManager : MonoBehaviour
         lifeTimePerWaterDrunk.Clear();
         lifeTimePerWaterDrunk = new List<float>(availableWaterSources+1); // 
         lifeTimePerWaterDrunk.Add(5f);
-        lifeTimePerWaterDrunk.Add(12f);
+        lifeTimePerWaterDrunk.Add(13f);
         lifeTimePerWaterDrunk.Add(15f);
+        lifeTimePerWaterDrunk.Add(18f);
+        lifeTimePerWaterDrunk.Add(23f);
         lifeTimePerWaterDrunk.Add(30f);
-        lifeTimePerWaterDrunk.Add(35f);
-        lifeTimePerWaterDrunk.Add(40f);
-        lifeTimePerWaterDrunk.Add(45f);
         //foreach (float val in lifeTimePerWaterDrunk) Debug.Log("val: " + val);
         // TODO this needs to be changed if water sources are added
 

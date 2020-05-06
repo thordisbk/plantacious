@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     // if thisGameVersion contains "B" then the game will use level3_B
     // else it will use level3_A
     // A (version A), B (version B), T (version T for Testing)
-    private string thisGameVersion = "1.1.T";  // T for testing
+    private string thisGameVersion = "1.B";  // T for testing
     private bool versionA = true;
     
     public static GameManager instance = null;
@@ -88,6 +88,10 @@ public class GameManager : MonoBehaviour
 
     private string dateFormat = "dd/MM/yyyy HH:mm:ss \"GMT\"zzz";
 
+    // for final survey
+    private bool websiteOpened = false;
+    private string survey_url = "https://docs.google.com/forms/d/e/1FAIpQLSdkVOTCts8r54ELO-FTd3cCMsXDyHlBsz74rQgpGQ5T94BiHw/viewform?usp=sf_link";
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -110,6 +114,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("This is version A");
             versionA = true;
         }
+
+        websiteOpened = false;
     }
 
     void Start() {
@@ -484,6 +490,10 @@ public class GameManager : MonoBehaviour
     }
 
     void changeScene() {
+        if (useTelemetry && !websiteOpened) {
+            websiteOpened = true;
+            Application.OpenURL(survey_url);
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -493,7 +503,7 @@ public class GameManager : MonoBehaviour
 
         // unreliable
         // if game is closed before it is completed, it is marked as "abandoned"
-        if (useTelemetry) StartCoroutine(telemetry.SubmitGoogleForm_levelend("abandoned", levelStartTime, levelNumber, vinesUsed, watersourcesReachedOrder, 
+        if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_levelend("abandoned", levelStartTime, levelNumber, vinesUsed, watersourcesReachedOrder, 
                                                                         num_watersources, num_obstacleslows, num_obstacledeaths, num_timeoutdeaths));
         if (useTelemetry && !gameWon) StartCoroutine(telemetry.SubmitGoogleForm_UploadImage());
     }
